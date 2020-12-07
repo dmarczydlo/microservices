@@ -1,0 +1,68 @@
+version: '3'
+services:
+  gateway:
+    container_name: gateway
+    build:
+      context: ./gateway
+      dockerfile: Dockerfile
+    env_file:
+     - ./gateway/.env
+    ports:
+      - 3001:3001
+    environment: 
+      USER_SERVICE_HOST: user
+    depends_on:
+     - user
+
+  file:
+    container_name: file
+    build:
+      context: ./file
+      dockerfile: Dockerfile
+    env_file:
+     - ./file/.env
+    ports:
+      - 3012:3012
+    depends_on:
+      - mongo
+    environment: 
+      MONGO_URL: mongo/users
+  
+  user:
+    container_name: user
+    build:
+      context: ./user
+      dockerfile: Dockerfile
+    env_file:
+     - ./user/.env 
+    ports:
+      - 3010:3010
+    depends_on:
+     - mongo
+    environment: 
+      MONGO_URL: mongo/users
+  mongo:
+    image: mongo
+    restart: always
+    ports:
+      - "27017:27017"
+    env_file:
+     - ./user/.env
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+    volumes:
+      - mongo-data:/data/db
+ 
+  mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+    - "8081:8081"
+    env_file:
+     - ./user/.env
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+volumes:
+ mongo-data:
