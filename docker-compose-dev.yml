@@ -1,0 +1,41 @@
+version: '3'
+services:
+  pg:
+    image: postgres:latest
+    env_file:
+      - ./project/.env
+    environment:
+      POSTGRES_PASSWORD: root
+      PGUSER: root
+      POSTGRES_USER: root
+      POSTGRES_DB: project
+    ports:
+      - "5432:5432"
+    volumes:
+      - pg-data:/var/lib/postgresql/data
+  mongo:
+    image: mongo
+    restart: always
+    ports:
+      - "27017:27017"
+    env_file:
+     - ./user/.env
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+    volumes:
+      - mongo-data:/data/db
+ 
+  mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+    - "8081:8081"
+    env_file:
+     - ./user/.env
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+volumes:
+ mongo-data:
+ pg-data:

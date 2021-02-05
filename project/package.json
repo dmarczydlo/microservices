@@ -18,15 +18,29 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "pretypeorm": "(rm ormconfig.json || :) && ts-node -r tsconfig-paths/register src/scripts/write-type-orm-config.ts",
+    "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
+    "typeorm:migration:create": "npm run typeorm -- migration:create -n",
+    "typeorm:migration:run": "npm run typeorm -- migration:run"
   },
   "dependencies": {
     "@nestjs/common": "^7.5.1",
+    "@nestjs/config": "^0.6.1",
     "@nestjs/core": "^7.5.1",
+    "@nestjs/microservices": "^7.6.5",
     "@nestjs/platform-express": "^7.5.1",
+    "@nestjs/typeorm": "^7.1.5",
+    "@types/faker": "^5.1.5",
+    "config": "^3.3.3",
+    "dotenv": "^8.2.0",
+    "joi": "^17.3.0",
+    "pg": "^8.5.1",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
-    "rxjs": "^6.6.3"
+    "rxjs": "^6.6.3",
+    "typeorm": "^0.2.29",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@nestjs/cli": "^7.5.1",
@@ -38,6 +52,7 @@
     "@types/supertest": "^2.0.10",
     "@typescript-eslint/eslint-plugin": "^4.6.1",
     "@typescript-eslint/parser": "^4.6.1",
+    "faker": "^5.1.0",
     "eslint": "^7.12.1",
     "eslint-config-prettier": "^6.15.0",
     "eslint-plugin-prettier": "^3.1.4",
